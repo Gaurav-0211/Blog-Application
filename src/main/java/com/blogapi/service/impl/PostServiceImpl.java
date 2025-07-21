@@ -70,8 +70,16 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostResponse getAllPost(Integer pageNumber, Integer pageSize, String sortBy) {
-        Pageable p = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy).descending()); // Asc or Desc choose based on requirement
+    public PostResponse getAllPost(Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
+
+        Sort sort = null;
+        if(sortDir.equals("asc")){
+            sort = Sort.by(sortDir).ascending();
+        }else{
+            sort = Sort.by(sortDir).descending();
+        }
+
+        Pageable p = PageRequest.of(pageNumber, pageSize, sort); // Asc or Desc choose based on requirement
         Page<Post> pagePost = this.postRepo.findAll(p);
         List<Post> allPosts = pagePost.getContent();
         List<PostDto> posts = allPosts.stream().map((post)->this.mapper.map(post,PostDto.class)).collect(Collectors.toList());
@@ -116,6 +124,9 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostDto> searchPost(String keyword) {
-        return List.of();
+        List<Post> posts = this.postRepo.findByTitleContaining(keyword);
+        List<PostDto> collect = posts.stream()
+                .map((post)->this.mapper.map(post, PostDto.class)).collect(Collectors.toList());
+        return collect;
     }
 }

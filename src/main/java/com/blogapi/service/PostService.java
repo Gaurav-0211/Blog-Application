@@ -1,5 +1,6 @@
 package com.blogapi.service;
 
+import com.blogapi.entity.Post;
 import com.blogapi.payload.PostDto;
 import com.blogapi.payload.PostResponse;
 
@@ -13,7 +14,7 @@ public interface PostService {
 
     void deletePost(Integer postId);
 
-    PostResponse getAllPost(Integer pageNumber, Integer pageSize, String sortBy);
+    PostResponse getAllPost(Integer pageNumber, Integer pageSize, String sortBy, String sortDir);
 
     PostDto getPostById(Integer postId);
 
