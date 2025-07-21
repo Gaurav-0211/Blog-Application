@@ -1,6 +1,5 @@
 package com.blogapi.controller;
 
-import com.blogapi.entity.ApiResponse;
 import com.blogapi.payload.CategoryDto;
 import com.blogapi.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
