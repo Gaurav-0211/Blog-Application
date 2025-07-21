@@ -1,6 +1,7 @@
 package com.blogapi.controller;
 
 import com.blogapi.payload.PostDto;
+import com.blogapi.payload.PostResponse;
 import com.blogapi.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -55,9 +56,9 @@ public class PostController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PostDto>> getAll(@RequestParam(value = "pageNumber", defaultValue = "1", required = false) Integer pageNumber,
-                                                @RequestParam(value = "pageSize",defaultValue = "5",required = false) Integer pageSize){
-        List<PostDto> posts = this.service.getAllPost(pageNumber, pageSize);
+    public ResponseEntity<PostResponse> getAll(@RequestParam(value = "pageNumber", defaultValue = "1", required = false) Integer pageNumber,
+                                               @RequestParam(value = "pageSize",defaultValue = "5",required = false) Integer pageSize){
+        PostResponse posts = this.service.getAllPost(pageNumber, pageSize);
         return ResponseEntity.ok(posts);
     }
 
