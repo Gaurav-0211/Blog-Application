@@ -1,6 +1,5 @@
 package com.blogapi.service;
 
-import com.blogapi.entity.Post;
 import com.blogapi.payload.PostDto;
 
 import java.util.List;
@@ -9,11 +8,11 @@ public interface PostService {
 
     PostDto createPost(PostDto postDto, Integer userId, Integer categoryId);
 
-    Post updatePost(PostDto postDto, Integer postId);
+    PostDto updatePost(PostDto postDto, Integer postId);
 
     void deletePost(Integer postId);
 
-    List<Post> getAllPost();
+    List<PostDto> getAllPost();
 
     PostDto getPostById(Integer postId);
 
