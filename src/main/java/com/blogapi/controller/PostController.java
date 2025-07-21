@@ -1,9 +1,7 @@
 package com.blogapi.controller;
 
-import com.blogapi.entity.Post;
 import com.blogapi.payload.PostDto;
 import com.blogapi.service.PostService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -57,8 +55,9 @@ public class PostController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PostDto>> getAll(){
-        List<PostDto> posts = this.service.getAllPost();
+    public ResponseEntity<List<PostDto>> getAll(@RequestParam(value = "pageNumber", defaultValue = "1", required = false) Integer pageNumber,
+                                                @RequestParam(value = "pageSize",defaultValue = "5",required = false) Integer pageSize){
+        List<PostDto> posts = this.service.getAllPost(pageNumber, pageSize);
         return ResponseEntity.ok(posts);
     }
 
