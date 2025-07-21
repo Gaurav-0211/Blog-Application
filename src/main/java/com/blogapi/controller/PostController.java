@@ -1,9 +1,6 @@
 package com.blogapi.controller;
 
-import com.blogapi.entity.Post;
-import com.blogapi.entity.User;
 import com.blogapi.payload.PostDto;
-import com.blogapi.payload.UserDto;
 import com.blogapi.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,7 +23,7 @@ public class PostController {
 
     // Get By User
     @GetMapping("/user/{userId}/post")
-    public ResponseEntity<List<PostDto>> getPostByUser(@PathVariable Integer userId){
+    public ResponseEntity<List<PostDto>> getPostUser(@PathVariable Integer userId){
         List<PostDto> posts = this.service.getPostByUser(userId);
         return ResponseEntity.ok(posts);
     }
@@ -34,7 +31,7 @@ public class PostController {
     //Get By Category
 
     @GetMapping("/category/{categoryId}/post")
-    public ResponseEntity<List<PostDto>> getPostByCategory(@PathVariable Integer categoryId){
+    public ResponseEntity<List<PostDto>> getPostCategory(@PathVariable Integer categoryId){
         List<PostDto> posts = this.service.getPostByCategory(categoryId);
         return ResponseEntity.ok(posts);
     }
