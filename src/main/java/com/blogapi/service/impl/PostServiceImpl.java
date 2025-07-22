@@ -74,9 +74,9 @@ public class PostServiceImpl implements PostService {
 
         Sort sort = null;
         if(sortDir.equals("asc")){
-            sort = Sort.by(sortDir).ascending();
+            sort = Sort.by(sortBy).ascending();
         }else{
-            sort = Sort.by(sortDir).descending();
+            sort = Sort.by(sortBy).descending();
         }
 
         Pageable p = PageRequest.of(pageNumber, pageSize, sort); // Asc or Desc choose based on requirement
