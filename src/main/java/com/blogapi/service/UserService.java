@@ -1,6 +1,7 @@
 package com.blogapi.service;
 
 import com.blogapi.payload.UserDto;
+import com.blogapi.payload.UserResponse;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -9,7 +10,7 @@ public interface UserService {
     UserDto createUser(UserDto user);
     UserDto updateUser(Integer userId, UserDto userDto);
     UserDto getUserById(Integer userId);
-    List<UserDto> getAllUser();
+    UserResponse getAllUser(Integer pageNumber, Integer pageSize, String sortBy, String sortDir);
     ResponseEntity<Void> deleteUser(Integer userId);
 
 }

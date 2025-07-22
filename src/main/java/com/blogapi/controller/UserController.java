@@ -1,14 +1,14 @@
 package com.blogapi.controller;
 
+import com.blogapi.config.AppConstants;
 import com.blogapi.payload.UserDto;
+import com.blogapi.payload.UserResponse;
 import com.blogapi.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -34,9 +34,14 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserDto>> getAll(){
-        List<UserDto> userDtos = this.service.getAllUser();
-        return new ResponseEntity<>(userDtos, HttpStatus.OK);
+    public ResponseEntity<UserResponse> getAll(
+            @RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize",defaultValue = AppConstants.PAGE_SIZE,required = false) Integer pageSize,
+            @RequestParam(value = "sortBy", defaultValue = AppConstants.SORT_BY, required = false) String sortBy,
+            @RequestParam (value = "sortDir", defaultValue = AppConstants.SORT_DIR,required = false) String sortDir
+    ){
+        UserResponse userDtos = this.service.getAllUser(pageNumber, pageSize, sortBy, sortDir);
+        return ResponseEntity.ok(userDtos);
     }
 
     @DeleteMapping("/{id}")
