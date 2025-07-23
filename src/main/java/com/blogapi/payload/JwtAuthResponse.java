@@ -1,4 +1,4 @@
-package com.blogapi.security;
+package com.blogapi.payload;
 
 import lombok.Data;
 
@@ -6,6 +6,5 @@ import lombok.Data;
 public class JwtAuthResponse {
 
     private String token;
-
 
 }
