@@ -1,9 +1,12 @@
 package com.blogapi.service.impl;
 
+import com.blogapi.config.AppConstants;
+import com.blogapi.entity.Role;
 import com.blogapi.entity.User;
 import com.blogapi.exceptions.ResourceNotFoundException;
 import com.blogapi.payload.UserDto;
 import com.blogapi.payload.UserResponse;
+import com.blogapi.repo.RoleRepo;
 import com.blogapi.repo.UserRepo;
 import com.blogapi.service.UserService;
 import org.modelmapper.ModelMapper;
@@ -15,11 +18,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,6 +32,25 @@ public class UserServiceImpl implements UserService {
     private UserRepo userRepo;
     @Autowired
     private ModelMapper mapper;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private RoleRepo roleRepo;
+
+    @Override
+    public UserDto registerNewUser(UserDto userDto) {
+        User user= this.mapper.map(userDto, User.class);
+        // Password Encoded
+        user.setPassword(this.passwordEncoder.encode(user.getPassword()));
+
+        // Roles
+        Role role =this.roleRepo.findById(AppConstants.NORMAL_USER).get();
+        user.getRoles().add(role);
+        User newUser = this.userRepo.save(user);
+        return this.mapper.map(newUser, UserDto.class);
+    }
 
     @Override
     public UserDto createUser(UserDto userDto) {

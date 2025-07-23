@@ -8,6 +8,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -28,5 +31,7 @@ public class UserDto {
 
     @NotEmpty(message = "this section cannot be empty !!")
     private String about;
+
+    private Set<RoleDto> roles = new HashSet<>();
 
 }
