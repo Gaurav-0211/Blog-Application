@@ -1,52 +1,53 @@
 package com.blogapi.config;
 
+import com.blogapi.security.JWTAuthenticationEntryPoint;
+import com.blogapi.security.JwtAuthenticationFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.config.Customizer;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig  {
+@EnableMethodSecurity // Enables @PreAuthorize and other annotations
+public class SecurityConfig {
+
+    @Autowired
+    private JWTAuthenticationEntryPoint entryPoint;
+
+    @Autowired
+    private JwtAuthenticationFilter filter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable)
+                .csrf(csrf -> csrf.disable())
+
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.GET,"/api/category").hasRole("NORMAL")
+                        .requestMatchers("/api/auth/**").permitAll() // Public endpoints like login/register
                         .anyRequest().authenticated()
+                )
+
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(entryPoint)
+                )
+
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 );
 
-        http.httpBasic(Customizer.withDefaults());
+        http.addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
-    }
-
-    @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails user = User
-                .withUsername("root")
-                .password(passwordEncoder().encode("root"))
-                .roles("NORMAL")
-                .build();
-
-        UserDetails user1 = User
-                .withUsername("user")
-                .password(passwordEncoder().encode("user"))
-                .roles("USER")
-                .build();
-
-        return new InMemoryUserDetailsManager(user, user1);
     }
 
     @Bean
@@ -54,5 +55,10 @@ public class SecurityConfig  {
         return new BCryptPasswordEncoder();
     }
 
-
+    // Used to authenticate user credentials (required for login API)
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
+    }
 }
+
