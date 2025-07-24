@@ -5,8 +5,6 @@ import com.blogapi.payload.UserResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
-import java.util.List;
-
 public interface UserService extends UserDetailsService {
     UserDto registerNewUser(UserDto userDto);
     UserDto createUser(UserDto user);
