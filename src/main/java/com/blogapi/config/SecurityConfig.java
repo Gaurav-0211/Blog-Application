@@ -38,9 +38,10 @@ public class SecurityConfig {
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/auth/**").permitAll() // All Authentication Api got permit
                         .requestMatchers(HttpMethod.GET).permitAll() // All get Api will be accessible without login
-                        .anyRequest().authenticated()
+                        .anyRequest()
+                        .authenticated()
                 );
 
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
@@ -55,8 +56,7 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); //NoOpPasswordEncoder.getInstance()- Use just when you stored password without encoded It is not save Just
-        // testing purpose it is still now in use.
+        return new BCryptPasswordEncoder(); //NoOpPasswordEncoder.getInstance()
     }
 }
 

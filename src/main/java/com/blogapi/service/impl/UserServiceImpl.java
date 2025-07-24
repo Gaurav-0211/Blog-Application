@@ -23,7 +23,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,9 +53,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto createUser(UserDto userDto) {
-        User user = this.dtoToUser(userDto);
+        User user = this.mapper.map(userDto,User.class);
         User saved = this.userRepo.save(user);
-        return this.userToDto(saved);
+        return this.mapper.map(saved,UserDto.class);
     }
 
     @Override
